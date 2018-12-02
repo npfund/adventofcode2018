@@ -34,5 +34,22 @@ fn part1() {
 }
 
 fn part2() {
+    let input = BufReader::new(File::open("input.txt").expect("File not found!"));
+    let left_lines = input.lines().map(|x| x.unwrap()).collect::<Vec<String>>();
+    let right_lines = left_lines.clone();
 
+    for x in left_lines {
+        for y in right_lines.clone() {
+            let chars = x.chars()
+                .zip(y.chars())
+                .filter(|(l, r)| l == r)
+                .map(|(l, _r)| l)
+                .collect::<String>();
+
+            if chars.len() == 25 {
+                println!("{}", chars);
+                return;
+            }
+        }
+    }
 }
