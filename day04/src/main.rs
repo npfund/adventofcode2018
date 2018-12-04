@@ -12,10 +12,6 @@ use chrono::Timelike;
 use regex::Regex;
 
 fn main() {
-    part1();
-}
-
-fn part1() {
     let input = BufReader::new(File::open("input.txt").expect("File not found!"));
     let regex = Regex::new(r"\[([^]]*)] (.*)").unwrap();
 
@@ -53,6 +49,11 @@ fn part1() {
         }
     }
 
+    part1(&guards);
+    part2(&guards);
+}
+
+fn part1(guards: &HashMap<u32, HashMap<u32, u32>>) {
     let highest = guards.iter()
         .max_by(|l, r| {
             let l_sum = l.1.values().sum::<u32>();
@@ -60,6 +61,18 @@ fn part1() {
 
             return l_sum.cmp(&r_sum);
         }).unwrap();
+
+    let highest_minute = highest.1.iter().max_by(|l, r| {
+        return l.1.cmp(r.1);
+    }).unwrap();
+
+    println!("{} = {} * {}", highest.0 * highest_minute.0, highest.0, highest_minute.0);
+}
+
+fn part2(guards: &HashMap<u32, HashMap<u32, u32>>) {
+    let highest = guards.iter().max_by(|l, r| {
+        l.1.values().max().unwrap().cmp(r.1.values().max().unwrap())
+    }).unwrap();
 
     let highest_minute = highest.1.iter().max_by(|l, r| {
         return l.1.cmp(r.1);
